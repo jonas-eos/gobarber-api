@@ -1,0 +1,11 @@
+{
+  "name": "module02",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/jonas-eos/gostack-bootcamp-module-02",
+  "author": "Jonas Evangelista <jonas.eos@outlook.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
