@@ -22,6 +22,10 @@ class User extends Model {
     });
     return this;
   }
+
+  passwordCorrect(__password) {
+    return bcrypt.compare(__password, this.password_hash);
+  }
 }
 
 export default User;
