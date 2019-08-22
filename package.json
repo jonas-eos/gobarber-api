@@ -5,7 +5,12 @@
   "repository": "https://github.com/jonas-eos/gostack-bootcamp-module-02",
   "author": "Jonas Evangelista <jonas.eos@outlook.com>",
   "license": "MIT",
+  "scripts": {
+    "start": "nodemon src/server.js"
+  },
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "nodemon": "^1.19.1",
+    "sucrase": "^3.10.1"
   }
 }
