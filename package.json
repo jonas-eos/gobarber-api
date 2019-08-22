@@ -11,6 +11,8 @@
   "dependencies": {
     "express": "^4.17.1",
     "nodemon": "^1.19.1",
+    "sequelize": "^5.15.2",
+    "sequelize-cli": "^5.5.0",
     "sucrase": "^3.10.1"
   },
   "devDependencies": {
