@@ -17,6 +17,10 @@ class UserController {
       provider,
     });
   }
+
+  async update(__request, __response) {
+    return __response.json({ ok: true });
+  }
 }
 
 export default new UserController();
