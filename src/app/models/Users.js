@@ -23,6 +23,13 @@ class User extends Model {
     return this;
   }
 
+  /**
+   * Link User models to File models
+   */
+  static associate(__models) {
+    this.belongsTo(__models.File, { foreignKey: 'avatar_id' });
+  }
+
   passwordCorrect(__password) {
     return bcrypt.compare(__password, this.password_hash);
   }
