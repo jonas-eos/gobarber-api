@@ -27,7 +27,7 @@ class User extends Model {
    * Link User models to File models
    */
   static associate(__models) {
-    this.belongsTo(__models.File, { foreignKey: 'avatar_id' });
+    this.belongsTo(__models.File, { foreignKey: 'avatar_id', as: 'avatar' });
   }
 
   passwordCorrect(__password) {
