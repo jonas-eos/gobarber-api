@@ -10,10 +10,13 @@ class AppointmentController {
    * List all appointments from logged user ID.
    */
   async index(__request, __response) {
+    const { page = 1 } = __request.query;
     const appointments = await Appointment.findAll({
       where: { user_id: __request.userId, canceled_at: null },
       order: ['date'],
       attributes: ['id', 'date'],
+      limit: 20,
+      offset: (page - 1) * 20,
       include: [
         {
           model: User,
