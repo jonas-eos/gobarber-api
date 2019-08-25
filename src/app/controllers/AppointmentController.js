@@ -7,6 +7,8 @@ import User from '../models/Users';
 import File from '../models/File';
 import Notification from '../schemas/Notification';
 
+import Mail from '../../lib/Mail';
+
 class AppointmentController {
   /**
    * List all appointments from logged user ID.
@@ -131,7 +133,15 @@ class AppointmentController {
   }
 
   async delete(__request, __response) {
-    const appointment = await Appointment.findByPk(__request.params.id);
+    const appointment = await Appointment.findByPk(__request.params.id, {
+      include: [
+        {
+          model: User,
+          as: 'provider',
+          attributes: ['name', 'email'],
+        },
+      ],
+    });
 
     /**
      * Error if appointment does not exist.
@@ -162,6 +172,15 @@ class AppointmentController {
     }
     appointment.canceled_at = new Date();
     await appointment.save();
+
+    /**
+     * Send a mail to provider.
+     */
+    await Mail.sendMail({
+      to: `${appointment.provider.name} <${appointment.provider.email}>`,
+      subject: 'Appointment canceled',
+      text: 'You have a new appointment canceled!',
+    });
 
     return __response.json(appointment);
   }
