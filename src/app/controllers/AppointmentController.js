@@ -140,6 +140,11 @@ class AppointmentController {
           as: 'provider',
           attributes: ['name', 'email'],
         },
+        {
+          model: User,
+          as: 'user',
+          attributes: ['name'],
+        },
       ],
     });
 
@@ -174,12 +179,20 @@ class AppointmentController {
     await appointment.save();
 
     /**
-     * Send a mail to provider.
+     * Send a mail to provider, using the cancellation template.
+     * The template is on src\app\views\cancellation.hbs
      */
     await Mail.sendMail({
       to: `${appointment.provider.name} <${appointment.provider.email}>`,
       subject: 'Appointment canceled',
-      text: 'You have a new appointment canceled!',
+      template: 'cancellation',
+      context: {
+        provider: appointment.provider.name,
+        user: appointment.user.name,
+        date: format(appointment.date, "MMMM dd', at' H:mm'h'", {
+          locale: pt,
+        }),
+      },
     });
 
     return __response.json(appointment);
