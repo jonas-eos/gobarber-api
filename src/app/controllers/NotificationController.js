@@ -28,6 +28,20 @@ class NotificationController {
 
     return __response.json(notifications);
   }
+
+  /**
+   * Find notification and update to read status.
+   *
+   * @return notification with updatedAt updated.
+   */
+  async update(__request, __response) {
+    const notification = await Notification.findByIdAndUpdate(
+      __request.params.id,
+      { read: true },
+      { new: true }
+    );
+    return __response.json(notification);
+  }
 }
 
 export default new NotificationController();
