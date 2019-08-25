@@ -3,8 +3,40 @@ import { startOfHour, parseISO, isBefore } from 'date-fns';
 
 import Appointment from '../models/Appointment';
 import User from '../models/Users';
+import File from '../models/File';
 
 class AppointmentController {
+  /**
+   * List all appointments from logged user ID.
+   */
+  async index(__request, __response) {
+    const appointments = await Appointment.findAll({
+      where: { user_id: __request.userId, canceled_at: null },
+      order: ['date'],
+      attributes: ['id', 'date'],
+      include: [
+        {
+          model: User,
+          as: 'provider',
+          attributes: ['name'],
+          include: [
+            {
+              model: File,
+              as: 'avatar',
+              attributes: ['path', 'url'],
+            },
+          ],
+        },
+      ],
+    });
+    return __response.json(appointments);
+  }
+
+  /**
+   * Create a new appointment on database.
+   * The provider, must have provider set with true value.
+   * You can not create appointment, if the user always have one register.
+   */
   async store(__request, __response) {
     /**
      * Set schema to validate the fields before save on database
