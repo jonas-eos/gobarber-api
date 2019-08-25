@@ -71,6 +71,13 @@ class AppointmentController {
         .json({ error: 'You can only create appointments with providers' });
     }
 
+    // Check if user try schedule with herself.
+    if (provider_id === __request.userId) {
+      return __response
+        .status(401)
+        .json({ error: 'You cannot schedule with yourself!' });
+    }
+
     // Convert hour to a format that JS can manipulate, and round then.
     const hourStart = startOfHour(parseISO(date));
 
