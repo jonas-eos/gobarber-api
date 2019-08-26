@@ -7,7 +7,8 @@ import User from '../models/Users';
 import File from '../models/File';
 import Notification from '../schemas/Notification';
 
-import Mail from '../../lib/Mail';
+import CancellationMail from '../jobs/CancellationMail';
+import Queue from '../../lib/Queue';
 
 class AppointmentController {
   /**
@@ -178,21 +179,9 @@ class AppointmentController {
     appointment.canceled_at = new Date();
     await appointment.save();
 
-    /**
-     * Send a mail to provider, using the cancellation template.
-     * The template is on src\app\views\cancellation.hbs
-     */
-    await Mail.sendMail({
-      to: `${appointment.provider.name} <${appointment.provider.email}>`,
-      subject: 'Appointment canceled',
-      template: 'cancellation',
-      context: {
-        provider: appointment.provider.name,
-        user: appointment.user.name,
-        date: format(appointment.date, "MMMM dd', at' H:mm'h'", {
-          locale: pt,
-        }),
-      },
+    // Add a job on the queue to send a cancellation mail.
+    await Queue.add(CancellationMail.key, {
+      appointment,
     });
 
     return __response.json(appointment);
